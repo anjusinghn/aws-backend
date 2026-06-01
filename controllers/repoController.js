@@ -3,6 +3,15 @@ const Repository = require("../models/repoModel");
 const User = require("../models/userModel");
 const Issue = require("../models/issueModel");
 
+const multer = require("multer");
+const path = require("path");
+const { s3, S3_BUCKET } = require("../config/aws-config");
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage,
+});
+
 async function createRepository(req, res) {
   const { owner, name, issues, content, description, visibility } = req.body;
 
@@ -159,6 +168,45 @@ async function deleteRepositoryById(req, res) {
   }
 }
 
+async function uploadFileToRepo(req, res) {
+  try {
+    const repoId = req.params.id;
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "No file uploaded",
+      });
+    }
+
+    const file = req.file;
+
+    const params = {
+      Bucket: S3_BUCKET,
+      Key: `repos/${repoId}/${Date.now()}-${file.originalname}`,
+      Body: file.buffer,
+    };
+
+    const result = await s3.upload(params).promise();
+
+    const repository = await Repository.findById(repoId);
+
+    repository.content.push(file.originalname);
+
+    await repository.save();
+
+    res.status(200).json({
+      message: "File uploaded",
+      url: result.Location,
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      message: "Upload failed",
+    });
+  }
+}
+
 module.exports = {
   createRepository,
   getAllRepositories,
@@ -168,4 +216,6 @@ module.exports = {
   updateRepositoryById,
   toggleVisibilityById,
   deleteRepositoryById,
+  uploadFileToRepo,
+  upload
 };
