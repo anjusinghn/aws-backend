@@ -29,4 +29,9 @@ repoRouter.get(
   commitController.getCommits
 );
 
+repoRouter.post(
+  "/repo/revert/:commitId",
+  commitController.revertCommit
+);
+
 module.exports = repoRouter;

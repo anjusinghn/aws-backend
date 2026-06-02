@@ -59,7 +59,40 @@ async function getCommits(req, res) {
   }
 }
 
+async function revertCommit(req, res) {
+  try {
+    const { commitId } = req.params;
+
+    const commit = await Commit.findById(commitId);
+
+    if (!commit) {
+      return res.status(404).json({
+        message: "Commit not found",
+      });
+    }
+
+    const repository = await Repository.findById(
+      commit.repository
+    );
+
+    repository.content = commit.files;
+
+    await repository.save();
+
+    res.status(200).json({
+      message: "Repository reverted successfully",
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      message: "Failed to revert repository",
+    });
+  }
+}
+
 module.exports = {
   createCommit,
   getCommits,
+  revertCommit
 };
