@@ -34,4 +34,8 @@ repoRouter.post(
   commitController.revertCommit
 );
 
+repoRouter.get("/repo/test123", (req, res) => {
+  res.send("test route working");
+});
+
 module.exports = repoRouter;
