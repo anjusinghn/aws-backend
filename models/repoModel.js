@@ -12,6 +12,8 @@ const RepositorySchema = new Schema({
   visibility: { type: Boolean },
   owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
   issues: [{ type: Schema.Types.ObjectId, ref: "Issue" }],
+
+  commits: [{ type: Schema.Types.ObjectId, ref: "Commit" }],
 });
 
 const Repository = mongoose.model("Repository", RepositorySchema);

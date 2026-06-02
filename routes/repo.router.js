@@ -1,5 +1,6 @@
 const express = require("express");
 const repoController = require("../controllers/repoController");
+const commitController = require("../controllers/commitController");
 
 const repoRouter = express.Router();
 
@@ -16,6 +17,16 @@ repoRouter.post(
   "/repo/upload/:id",
   repoController.upload.single("file"),
   repoController.uploadFileToRepo
+);
+
+repoRouter.post(
+  "/repo/commit/:id",
+  commitController.createCommit
+);
+
+repoRouter.get(
+  "/repo/commits/:id",
+  commitController.getCommits
 );
 
 module.exports = repoRouter;
