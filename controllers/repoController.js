@@ -190,7 +190,7 @@ async function uploadFileToRepo(req, res) {
 
     const repository = await Repository.findById(repoId);
 
-    repository.content.push(file.originalname);
+    repository.content.push(result.Key);
 
     await repository.save();
 
