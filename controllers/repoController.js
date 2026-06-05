@@ -207,6 +207,29 @@ async function uploadFileToRepo(req, res) {
   }
 }
 
+async function getFileContent(req, res) {
+  try {
+    const { key } = req.body;
+
+    const params = {
+      Bucket: S3_BUCKET,
+      Key: key,
+    };
+
+    const data = await s3.getObject(params).promise();
+
+    res.status(200).json({
+      content: data.Body.toString("utf-8"),
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      message: "Failed to fetch file",
+    });
+  }
+}
+
 module.exports = {
   createRepository,
   getAllRepositories,
@@ -217,5 +240,6 @@ module.exports = {
   toggleVisibilityById,
   deleteRepositoryById,
   uploadFileToRepo,
-  upload
+  upload,
+  getFileContent,
 };
