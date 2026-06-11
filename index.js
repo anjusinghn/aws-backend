@@ -48,8 +48,32 @@ yargs(hideBin(process.argv))
       commitRepo(argv.message);
     },
   )
-  .command("pull", "Pull changes from the remote repository", {}, pullRepo)
-  .command("push", "Push changes to the remote repository", {}, pushRepo)
+  .command(
+  "pull <repoId>",
+  "Pull changes from remote repository",
+  (yargs) => {
+    yargs.positional("repoId", {
+      describe: "Repository ID",
+      type: "string",
+    });
+  },
+  (argv) => {
+    pullRepo(argv.repoId);
+  }
+)
+  .command(
+  "push <repoId>",
+  "Push changes to remote repository",
+  (yargs) => {
+    yargs.positional("repoId", {
+      describe: "Repository ID",
+      type: "string",
+    });
+  },
+  (argv) => {
+    pushRepo(argv.repoId);
+    }
+  )
   .command(
     "revert <commit>",
     "Revert to a specific commit",
