@@ -16,7 +16,7 @@ The project implements core version control concepts such as:
 * Remote push/pull synchronization
 * Cloud-backed commit storage
 * Historical snapshot restoration
-* Repository hosting through a deployed frontend
+* Web-based repository interface
 * Distributed synchronization using AWS S3
 
 ---
@@ -84,7 +84,7 @@ AWS S3 Remote Storage
 ↓
 MongoDB Repository Metadata
 ↓
-web-based repository visualization
+Web Repository Interface
 
 ---
 
@@ -162,7 +162,7 @@ node index.js commit "initial commit"
 node index.js push <repoId>
 ```
 
-The pushed commits are then visible inside the deployed web-based repository visualization.
+The pushed commits are then visible inside the deployed web interface.
 
 ---
 
@@ -204,6 +204,16 @@ backend/
 * File change tracking
 * Improved authentication
 * Optimized storage strategy
+
+---
+
+# Links
+
+Frontend Repository:
+https://github.com/anjusinghn/distributed-vcs-frontend
+
+Live Demo:
+https://main.d1u47ze5t6nkkg.amplifyapp.com/auth
 
 ---
 
