@@ -1,5 +1,6 @@
 const Repository = require("../models/repoModel");
 const Commit = require("../models/commitModel");
+const { s3, S3_BUCKET } = require("../config/aws-config");
 
 async function createCommit(req, res) {
   try {

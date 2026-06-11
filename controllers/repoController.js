@@ -230,6 +230,51 @@ async function getFileContent(req, res) {
   }
 }
 
+async function syncRepositoryFromS3(req, res) {
+  try {
+
+    const { id } = req.params;
+
+    const data = await s3.listObjectsV2({
+      Bucket: S3_BUCKET,
+      Prefix: `repos/${id}/commits/`,
+    }).promise();
+
+    const objects = data.Contents;
+
+    const repository = await Repository.findById(id);
+
+    if (!repository) {
+      return res.status(404).json({
+        message: "Repository not found",
+      });
+    }
+
+    const files = objects
+  .filter((obj) => !obj.Key.endsWith("/"))
+  .map((obj) => obj.Key);
+
+    repository.content = files;
+
+    await repository.save();
+
+    res.status(200).json({
+      message: "Repository synced successfully",
+      files,
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      message: "Failed to sync repository",
+    });
+
+  }
+}
+
+
 module.exports = {
   createRepository,
   getAllRepositories,
@@ -242,4 +287,5 @@ module.exports = {
   uploadFileToRepo,
   upload,
   getFileContent,
+  syncRepositoryFromS3
 };

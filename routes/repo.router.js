@@ -39,5 +39,11 @@ repoRouter.post(
   repoController.getFileContent
 );
 
+repoRouter.post(
+  "/repo/sync/:id",
+  repoController.syncRepositoryFromS3
+);
+
+
 
 module.exports = repoRouter;
